@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bankomat
+﻿namespace Bankomat
 {
     internal class BankAccount
     {
@@ -34,6 +28,11 @@ namespace Bankomat
             {
                 throw new Exception("Not enough money");
             }
+        }
+
+        internal string Display()
+        {
+            return $"{AccountNumber} \t\t{Balance} SEK";
         }
     }
 }

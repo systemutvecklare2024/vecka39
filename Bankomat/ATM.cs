@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bankomat
+﻿namespace Bankomat
 {
     // Handles user input and output
     internal class ATM
@@ -33,7 +27,7 @@ namespace Bankomat
 
             while (run)
             {
-                DisplayMenu(menuChoice);
+                MainMenu();
                 menuChoice = SelectChoice(GetInput());
 
                 switch (menuChoice)
@@ -45,15 +39,16 @@ namespace Bankomat
                         DepositMenu();
                         break;
                     case Menu.Withdraw:
+                        WithdrawMenu();
                         break;
                     case Menu.Balance:
+                        BalanceMenu();
                         break;
                     case Menu.List:
+                        ListMenu();
                         break;
                     case Menu.Exit:
-                        Console.WriteLine("Tack för att ni använder Bankomat2000");
-                        Console.WriteLine("Press the _any_ key to exit.");
-                        Console.ReadKey();
+                        ExitMenu();
                         run = false;
                         break;
                     default:
@@ -66,17 +61,24 @@ namespace Bankomat
             }
         }
 
-        public void DisplayMenu(Menu menu)
+        private void ListMenu()
         {
-            switch (menu)
+            Console.Clear();
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Kontonr \tBalans");
+            Console.WriteLine("----------------------");
+            string[] accountList = bank.AccountList();
+            for (int i = 0;i< accountList.Length;i++)
             {
-                case Menu.Main:
-                    MainMenu();
-                    break;
+                Console.WriteLine(accountList[i]);
             }
+            Console.WriteLine("----------------------");
+
+            Console.WriteLine("Tryck på valfri knapp för att fortsätta");
+            Console.ReadKey();
         }
 
-        public void MainMenu()
+        private void MainMenu()
         {
             Console.WriteLine("    Bankomat2000");
             Console.WriteLine("-----------------------");
@@ -87,28 +89,95 @@ namespace Bankomat
             Console.WriteLine("5. Avsluta.");
         }
 
-        public void DepositMenu()
+        private void DepositMenu()
         {
             Console.Clear();
-            int accountNr;
+            int accountNr = GetAccount();
+
+            while (true)
+            {
+                Console.Write("Summa att sätta in: ");
+                var amount = GetInput();
+                if (bank.Deposit(accountNr, amount))
+                {
+                    Console.WriteLine($"{amount} SEK har satts in på ert konto.");
+                    Console.WriteLine("Tryck på valfri knapp för att fortsätta");
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Ett fel har inträffat, försök igen.");
+                }
+            }
+        }
+
+        private void WithdrawMenu()
+        {
+            Console.Clear();
+
+            int accountNr = GetAccount();
+
+            while (true)
+            {
+
+                Console.Write("Summa att ta ut: ");
+                var amount = GetInput();
+
+
+                if (bank.Withdraw(accountNr, amount))
+                {
+                    Console.WriteLine($"{amount} SEK har tagits ut från ert konto.");
+                    Console.WriteLine("Tryck på valfri knapp för att fortsätta");
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Ett fel har inträffat, försök igen.");
+                }
+            }
+        }
+
+        private void BalanceMenu()
+        {
+            Console.Clear();
+
+            int accountNr = GetAccount();
+
+            try
+            {
+                var balance = bank.GetBalance(accountNr);
+
+                Console.WriteLine($"Det finns {balance} SEK på ert konto.");
+                Console.WriteLine("Tryck på valfri knapp för att fortsätta");
+                Console.ReadKey();
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadKey();
+            }
+        }
+
+        private void ExitMenu()
+        {
+            Console.WriteLine("Tack för att ni använder Bankomat2000");
+            Console.WriteLine("Press the _any_ key to exit.");
+            Console.ReadKey();
+        }
+
+
+        private int GetAccount()
+        {
             while (true)
             {
                 Console.Write("Ange kontonummer: ");
-                accountNr = GetInput();
+                var accountNr = GetInput();
                 if (bank.AccountWithNumberExists(accountNr))
                 {
-                    while (true)
-                    {
-                        Console.Write("Summa att sätta in: ");
-                        var amount = GetInput();
-                        if (bank.Deposit(accountNr, amount))
-                        {
-                            Console.WriteLine($"{amount} SEK har satts in på ert konto.");
-                            Console.WriteLine("Tryck på valfri knapp för att fortsätta");
-                            Console.ReadKey();
-                            return;
-                        }
-                    }
+                    return accountNr;
                 }
                 else
                 {
@@ -117,12 +186,13 @@ namespace Bankomat
             }
         }
 
-        public Menu SelectChoice(int choice)
+
+        private Menu SelectChoice(int choice)
         {
             return (Menu)choice;
         }
 
-        public int GetInput()
+        private int GetInput()
         {
             int input;
             while (true)

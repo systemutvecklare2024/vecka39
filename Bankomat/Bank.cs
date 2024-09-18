@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bankomat
+﻿namespace Bankomat
 {
     // Handles the business logic
     internal class Bank
     {
         BankAccount[] accounts;
+
 
         public Bank()
         {
@@ -29,7 +23,16 @@ namespace Bankomat
             ];
         }
 
-
+        internal string[] AccountList()
+        {
+            string[] result = new string[accounts.Length];
+            for (int i = 0; i < accounts.Length; i++)
+            {
+                result[i] = accounts[i].Display();
+            }
+            
+            return result;
+        }
 
         internal bool AccountWithNumberExists(int accountNr)
         {
@@ -53,6 +56,42 @@ namespace Bankomat
                     try
                     {
                         account.Deposit(amount);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Ogiltigt belopp, försök igen.");
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal int GetBalance(int accountNr)
+        {
+            foreach (var account in accounts)
+            {
+                if (account.AccountNumber == accountNr) 
+                { 
+                    return account.Balance; 
+                }
+            }
+
+            throw new Exception("Ett problem uppstod, försök igen");
+        }
+
+        internal bool Withdraw(int accountNr, int amount)
+        {
+            foreach (var account in accounts)
+            {
+                if (account.AccountNumber == accountNr)
+                {
+                    try
+                    {
+                        account.Withdraw(amount);
                     }
                     catch (Exception)
                     {
