@@ -3,7 +3,7 @@
     // Handles user input and output
     internal class ATM
     {
-        private Bank bank;
+        private readonly Bank bank;
 
         public enum Menu
         {
@@ -52,6 +52,7 @@
                         run = false;
                         break;
                     default:
+                        Console.Clear();
                         continue;
                 }
 
@@ -61,22 +62,10 @@
             }
         }
 
-        private void ListMenu()
-        {
-            Console.Clear();
-            Console.WriteLine("----------------------");
-            Console.WriteLine("Kontonr \tBalans");
-            Console.WriteLine("----------------------");
-            string[] accountList = bank.AccountList();
-            for (int i = 0;i< accountList.Length;i++)
-            {
-                Console.WriteLine(accountList[i]);
-            }
-            Console.WriteLine("----------------------");
 
-            Console.WriteLine("Tryck på valfri knapp för att fortsätta");
-            Console.ReadKey();
-        }
+        /************************
+         * Menus
+         ************************/
 
         private void MainMenu()
         {
@@ -96,18 +85,19 @@
 
             while (true)
             {
-                Console.Write("Summa att sätta in: ");
-                var amount = GetInput();
-                if (bank.Deposit(accountNr, amount))
+                var amount = GetInput("Summa att sätta in: ");
+
+                try
                 {
+                    bank.Deposit(accountNr, amount);
                     Console.WriteLine($"{amount} SEK har satts in på ert konto.");
-                    Console.WriteLine("Tryck på valfri knapp för att fortsätta");
-                    Console.ReadKey();
+                    Halt();
                     return;
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Ett fel har inträffat, försök igen.");
+                    Console.WriteLine(ex.Message);
+                    return;
                 }
             }
         }
@@ -120,16 +110,13 @@
 
             while (true)
             {
-
-                Console.Write("Summa att ta ut: ");
-                var amount = GetInput();
+                var amount = GetInput("Summa att ta ut: ");
 
 
                 if (bank.Withdraw(accountNr, amount))
                 {
                     Console.WriteLine($"{amount} SEK har tagits ut från ert konto.");
-                    Console.WriteLine("Tryck på valfri knapp för att fortsätta");
-                    Console.ReadKey();
+                    Halt();
                     return;
                 }
                 else
@@ -150,21 +137,48 @@
                 var balance = bank.GetBalance(accountNr);
 
                 Console.WriteLine($"Det finns {balance} SEK på ert konto.");
-                Console.WriteLine("Tryck på valfri knapp för att fortsätta");
-                Console.ReadKey();
+                Halt();
                 return;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.ReadKey();
+                Halt();
             }
+        }
+
+        private void ListMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Kontonr \tBalans");
+            Console.WriteLine("----------------------");
+
+            string[] accountList = bank.GetAccountList();
+            for (int i = 0; i < accountList.Length; i++)
+            {
+                Console.WriteLine(accountList[i]);
+            }
+
+            Console.WriteLine("----------------------");
+
+            Halt();
         }
 
         private void ExitMenu()
         {
             Console.WriteLine("Tack för att ni använder Bankomat2000");
-            Console.WriteLine("Press the _any_ key to exit.");
+            Halt();
+        }
+
+
+        /************************
+        * Helpers
+        ************************/
+
+        private void Halt()
+        {
+            Console.WriteLine("Tryck på valfri knapp för att fortsätta");
             Console.ReadKey();
         }
 
@@ -173,8 +187,7 @@
         {
             while (true)
             {
-                Console.Write("Ange kontonummer: ");
-                var accountNr = GetInput();
+                var accountNr = GetInput("Ange kontonummer: ");
                 if (bank.AccountWithNumberExists(accountNr))
                 {
                     return accountNr;
@@ -192,11 +205,17 @@
             return (Menu)choice;
         }
 
-        private int GetInput()
+        private int GetInput(string message = "")
         {
+
             int input;
             while (true)
             {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Console.Write(message);
+                }
+
                 if (!int.TryParse(Console.ReadLine(), out input))
                 {
                     Console.WriteLine("Ogiltig input, försök igen!");

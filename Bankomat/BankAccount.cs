@@ -10,27 +10,29 @@
             AccountNumber = accountNumber;
         }
 
-        internal void Deposit(int amount)
+        public bool Deposit(int amount)
         {
             if (amount < 0)
             {
-                throw new Exception("Invalid amount");
+                return false;
             }
             Balance += amount;
+
+            return true;
         }
 
-        internal void Withdraw(int amount)
+        public bool Withdraw(int amount)
         {
-            if ( Balance - amount >= 0)
+            if (Balance - amount >= 0)
             {
                 Balance -= amount;
-            } else
-            {
-                throw new Exception("Not enough money");
+                return true;
             }
+
+            return false;
         }
 
-        internal string Display()
+        public string Display()
         {
             return $"{AccountNumber} \t\t{Balance} SEK";
         }
