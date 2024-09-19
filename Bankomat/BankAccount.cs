@@ -23,6 +23,10 @@
 
         public bool Withdraw(int amount)
         {
+            if (amount <= 0)
+            {
+                return false;
+            }
             if (Balance - amount >= 0)
             {
                 Balance -= amount;

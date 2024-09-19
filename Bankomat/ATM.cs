@@ -97,7 +97,7 @@
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return;
+                    Halt();
                 }
             }
         }
@@ -108,22 +108,18 @@
 
             int accountNr = GetAccount();
 
-            while (true)
+            var amount = GetInput("Summa att ta ut: ");
+
+            if (bank.Withdraw(accountNr, amount))
             {
-                var amount = GetInput("Summa att ta ut: ");
-
-
-                if (bank.Withdraw(accountNr, amount))
-                {
-                    Console.WriteLine($"{amount} SEK har tagits ut från ert konto.");
-                    Halt();
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("Ett fel har inträffat, försök igen.");
-                }
+                Console.WriteLine($"{amount} SEK har tagits ut från ert konto.");
             }
+            else
+            {
+                Console.WriteLine("Ett fel har inträffat, försök igen.");
+            }
+
+            Halt();
         }
 
         private void BalanceMenu()
@@ -176,7 +172,7 @@
         * Helpers
         ************************/
 
-        private void Halt()
+        private static void Halt()
         {
             Console.WriteLine("Tryck på valfri knapp för att fortsätta");
             Console.ReadKey();
@@ -205,7 +201,7 @@
             return (Menu)choice;
         }
 
-        private int GetInput(string message = "")
+        private static int GetInput(string message = "")
         {
 
             int input;
