@@ -2,23 +2,20 @@
 {
     public class Bank
     {
-        private readonly BankAccount[] accounts;
+        private readonly List<BankAccount> accounts;
 
         public Bank()
         {
-            accounts =
-            [
-                new BankAccount(1),
-                new BankAccount(2),
-                new BankAccount(3),
-                new BankAccount(4),
-                new BankAccount(5),
-                new BankAccount(6),
-                new BankAccount(7),
-                new BankAccount(8),
-                new BankAccount(9),
-                new BankAccount(10),
-            ];
+            accounts = new List<BankAccount>();
+            SeedAccounts();
+        }
+
+        private void SeedAccounts()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                accounts.Add(new BankAccount(i));
+            }
         }
 
 
@@ -67,13 +64,13 @@
 
         public string[] GetAccountList()
         {
-            string[] result = new string[accounts.Length];
-            for (int i = 0; i < accounts.Length; i++)
+            List<string> result = new();
+            foreach (var account in accounts)
             {
-                result[i] = accounts[i].Display();
+                result.Add(account.Display());
             }
 
-            return result;
+            return [.. result];
         }
 
         public bool AccountWithNumberExists(int accountNr)
