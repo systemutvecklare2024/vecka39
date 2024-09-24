@@ -11,8 +11,10 @@
             Deposit = 1,
             Withdraw = 2,
             Balance = 3,
-            List = 4,
-            Exit = 5
+            Create = 4,
+            Delete = 5,
+            List = 6,
+            Exit = 7
         }
 
         public ATM()
@@ -71,11 +73,13 @@
         {
             Console.WriteLine("    Bankomat2000");
             Console.WriteLine("-----------------------");
-            Console.WriteLine("1. Gör insättning.");
-            Console.WriteLine("2. Gör uttag.");
-            Console.WriteLine("3. Visa saldo.");
-            Console.WriteLine("4. Lista alla konton.");
-            Console.WriteLine("5. Avsluta.");
+            Console.WriteLine("1. Deposit.");
+            Console.WriteLine("2. Withdraw.");
+            Console.WriteLine("3. Create account.");
+            Console.WriteLine("4. Delete account.");
+            Console.WriteLine("5. Show balance.");
+            Console.WriteLine("6. List all accounts.");
+            Console.WriteLine("7. Quit.");
         }
 
         private void DepositMenu()
@@ -110,13 +114,14 @@
 
             var amount = GetInput("Summa att ta ut: ");
 
-            if (bank.Withdraw(accountNr, amount))
+            try
             {
+                bank.Withdraw(accountNr, amount);
                 Console.WriteLine($"{amount} SEK har tagits ut från ert konto.");
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Ett fel har inträffat, försök igen.");
+                Console.WriteLine(ex.Message);
             }
 
             Halt();
@@ -163,6 +168,8 @@
 
         private void ExitMenu()
         {
+            bank.Save();
+
             Console.WriteLine("Tack för att ni använder Bankomat2000");
             Halt();
         }

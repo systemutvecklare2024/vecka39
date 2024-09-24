@@ -5,35 +5,35 @@
         public int AccountNumber { get; }
         public int Balance { get; private set; }
 
-        public BankAccount(int accountNumber)
+    
+        public BankAccount(int accountNumber, int balance = 0)
         {
             AccountNumber = accountNumber;
+            Balance = balance;
         }
 
-        public bool Deposit(int amount)
+        public void Deposit(int amount)
         {
             if (amount < 0)
             {
-                return false;
+                throw new Exception("Kan ej sätta in negativ summa");
             }
-            Balance += amount;
 
-            return true;
+            Balance += amount;
         }
 
-        public bool Withdraw(int amount)
+        public void Withdraw(int amount)
         {
-            if (amount <= 0)
+            if (amount < 0)
             {
-                return false;
+                throw new Exception("Kan ej ta ut negativ summa");
             }
-            if (Balance - amount >= 0)
+            if (Balance - amount < 0)
             {
-                Balance -= amount;
-                return true;
+                throw new Exception($"Det saknas medel för att ta ut {amount} SEK");
             }
 
-            return false;
+            Balance -= amount;
         }
 
         public string Display()
