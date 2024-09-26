@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            ATM atm = new ATM();
+            Bank bank = new Bank();
+            ATM atm = new ATM(bank);
             atm.Run();
         }
     }

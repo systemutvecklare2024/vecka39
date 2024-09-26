@@ -1,4 +1,6 @@
-﻿namespace Bankomat
+﻿using System.Security.Cryptography;
+
+namespace Bankomat
 {
     public class Bank
     {
@@ -52,17 +54,28 @@
             }
         }
 
-        public void CreateAccount()
+        public void CreateAccount(string name, int initialBalance=0)
         {
-
+            var accountNr = GetNewAccountId();
+            var account = new BankAccount(accountNr, name, initialBalance);
+            accounts.Add(account);
         }
 
-        public void DeleteAccount()
+        public void DeleteAccount(int accountId)
         {
-
+            foreach (var account in accounts)
+            {
+                if(account.AccountNumber == accountId)
+                {
+                    if(!accounts.Remove(account))
+                    {
+                        throw new Exception($"Unable to remove account with id: {accountId}");
+                    }
+                    return;
+                }
+            }
         }
         
-
         public int GetBalance(int accountNr)
         {
             var account = GetAccount(accountNr);
@@ -70,16 +83,17 @@
             return account.Balance;
         }
 
-        public string[] GetAccountList()
+        public List<BankAccountDto> GetAccountList()
         {
-            List<string> result = [];
+            var result = new List<BankAccountDto>();
             foreach (var account in accounts)
             {
-                result.Add(account.Display());
+                result.Add(BankAccountDto.FromBankAccount(account));
             }
 
-            return [.. result];
+            return result;
         }
+
 
         private BankAccount GetAccount(int accountNr)
         {
@@ -91,7 +105,7 @@
                 }
             }
 
-            throw new Exception("Bankkonto finns ej.");
+            throw new Exception("Unable to find back account.");
         }
 
         public bool AccountWithNumberExists(int accountNr)
@@ -105,6 +119,23 @@
             }
 
             return false;
+        }
+
+        private int GetNewAccountId()
+        {
+            Random rnd = new Random();
+            while (true)
+            {
+                var number = rnd.Next((accounts.Count + 1) * 2);
+
+                var query = from account in accounts
+                            where account.AccountNumber == number
+                            select account;
+
+                if (query?.Count() == 0)
+                    return number;
+            }
+
         }
 
         public void Save()

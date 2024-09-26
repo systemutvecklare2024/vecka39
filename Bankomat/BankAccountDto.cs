@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bankomat
+﻿namespace Bankomat
 {
-    internal class BankAccountDto
+    public class BankAccountDto
     {
         public int AccountNumber { get; set; }
         public int Balance { get; set; }
 
+        public string Name { get; set; } = "";
+
 
         public BankAccount ToBankAccount()
         {
-            return new BankAccount(AccountNumber, Balance);
+            return new BankAccount(AccountNumber, Name, Balance);
         }
 
         public static BankAccountDto FromBankAccount(BankAccount bankAccount)
         {
             return new BankAccountDto { 
                 AccountNumber = bankAccount.AccountNumber, 
-                Balance = bankAccount.Balance
+                Balance = bankAccount.Balance,
+                Name = bankAccount.Name,
             };
         }
     }
