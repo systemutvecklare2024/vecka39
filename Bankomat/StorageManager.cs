@@ -30,7 +30,6 @@ namespace Bankomat
             {
                 var json = JsonSerializer.Serialize(dtos);
 
-                // TODO: Error handling
                 File.WriteAllText(TEMP_PATH, json);
                 File.Copy(TEMP_PATH, Path, true);
             }
@@ -56,7 +55,8 @@ namespace Bankomat
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Database not found.");
+                Console.WriteLine("No database was found.");
+                Console.WriteLine("A new database will be created when exiting the program.");
             }
             catch (Exception)
             {

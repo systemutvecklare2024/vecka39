@@ -19,7 +19,7 @@
         {
             if (amount < 0)
             {
-                throw new Exception("Kan ej sätta in negativ summa");
+                throw new Exception("Can not deposit a negative amount.");
             }
 
             Balance += amount;
@@ -29,11 +29,11 @@
         {
             if (amount < 0)
             {
-                throw new Exception("Kan ej ta ut negativ summa");
+                throw new Exception("Can not withdraw a negative amount.");
             }
             if (Balance - amount < 0)
             {
-                throw new Exception($"Det saknas medel för att ta ut {amount} SEK");
+                throw new Exception($"Not enough funds to withdraw {amount} SEK.");
             }
 
             Balance -= amount;

@@ -14,10 +14,7 @@
             }
             catch (Exception ex)
             {
-                accounts = new List<BankAccount>();
-                Console.WriteLine("Something blew up");
                 Console.WriteLine(ex.Message);
-                Console.ReadKey();
             }
         }
 
@@ -64,7 +61,7 @@
                 {
                     if(!accounts.Remove(account))
                     {
-                        throw new Exception($"Unable to remove account with id: {accountId}");
+                        throw new Exception($"Unable to remove account with id: {accountId}.");
                     }
                     return;
                 }
