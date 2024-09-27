@@ -6,7 +6,6 @@
         public string Name { get; private set; } = "";
         public int Balance { get; private set; }
 
-    
         public BankAccount(int accountNumber, string name, int balance = 0)
         {
             AccountNumber = accountNumber;

@@ -7,14 +7,3 @@ Vid avslut ska listan serializeras och sparas i en fil, så att ni automatiskt ka
 
 Frivillig extra del:
 Implementera funktionallitet för att lägga till och ta bort konton så valfritt antal kan finnas.
-
-
-
-## TODO
-- Lägga till och ta bort konton
--[x] Serialisering
-	-[x] DTO
-
-
-## Bugs
-- Unable to get out of the input bank account prompt when there are no bank accounts

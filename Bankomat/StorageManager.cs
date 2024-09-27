@@ -7,6 +7,7 @@ namespace Bankomat
         const string DEFAULT_PATH = "accounts.json";
         const string TEMP_PATH = "accounts.temp.json";
         public string Path { get; private set; }
+
         public StorageManager(string path)
         {
             if (string.IsNullOrEmpty(path))

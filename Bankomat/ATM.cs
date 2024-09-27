@@ -151,14 +151,15 @@
             Console.Clear();
             Console.WriteLine("Provide the following information to create the account.");
             Console.Write("Name of account holder: ");
-            
+
             var name = Console.ReadLine();
-            if (name == null) {
+            if (name == null)
+            {
                 Console.WriteLine("Invalid name");
                 Halt();
                 return;
             }
-            
+
             var initialBalance = GetValidNumber("Initial balance of account: ");
 
             bank.CreateAccount(name, initialBalance);
@@ -180,9 +181,9 @@
 
             Console.WriteLine($"Are you sure you want to delete the account with account number {accountNumber}?");
             Console.WriteLine("Press (Y) to confirm");
-            
-            var key =Console.ReadKey();
-            if(key.Key != ConsoleKey.Y)
+
+            var key = Console.ReadKey();
+            if (key.Key != ConsoleKey.Y)
             {
                 return;
             }
@@ -217,7 +218,6 @@
             Console.ReadKey();
         }
 
-
         private int GetAccount()
         {
             if (bank.GetAccountList().Count == 0)
@@ -240,7 +240,6 @@
                 }
             }
         }
-
 
         private static int GetValidNumber(string message = "")
         {
@@ -268,7 +267,7 @@
         private void ListAccounts()
         {
             // Order by account number
-            var accountList = bank.GetAccountList().OrderBy( acc => acc.AccountNumber).ToList();
+            var accountList = bank.GetAccountList().OrderBy(acc => acc.AccountNumber).ToList();
 
             if (accountList.Count == 0)
             {

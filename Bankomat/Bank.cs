@@ -46,7 +46,7 @@
             }
         }
 
-        public void CreateAccount(string name, int initialBalance=0)
+        public void CreateAccount(string name, int initialBalance = 0)
         {
             var accountNr = GenerateValidId();
             var account = new BankAccount(accountNr, name, initialBalance);
@@ -57,9 +57,9 @@
         {
             foreach (var account in accounts)
             {
-                if(account.AccountNumber == accountId)
+                if (account.AccountNumber == accountId)
                 {
-                    if(!accounts.Remove(account))
+                    if (!accounts.Remove(account))
                     {
                         throw new Exception($"Unable to remove account with id: {accountId}.");
                     }
@@ -67,11 +67,11 @@
                 }
             }
         }
-        
+
         public int GetBalance(int accountNr)
         {
             var account = GetAccount(accountNr);
-            
+
             return account.Balance;
         }
 
@@ -85,7 +85,6 @@
 
             return result;
         }
-
 
         private BankAccount GetAccount(int accountNr)
         {
@@ -129,7 +128,6 @@
                 if (query?.Count() == 0)
                     return number;
             }
-
         }
 
         public void Save()
