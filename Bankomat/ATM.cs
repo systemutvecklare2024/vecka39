@@ -72,6 +72,11 @@
             Console.Clear();
             int accountNr = GetAccount();
 
+            if (accountNr == -1)
+            {
+                return;
+            }
+
             while (true)
             {
                 var amount = GetValidNumber("Amount to deposit: ");
@@ -96,6 +101,10 @@
             Console.Clear();
 
             int accountNr = GetAccount();
+            if (accountNr == -1)
+            {
+                return;
+            }
 
             var amount = GetValidNumber("Amount to withdraw: ");
 
@@ -117,6 +126,10 @@
             Console.Clear();
 
             int accountNr = GetAccount();
+            if (accountNr == -1)
+            {
+                return;
+            }
 
             try
             {
@@ -155,6 +168,7 @@
         {
             Console.Clear();
             ListAccounts();
+
             var accountNumber = GetValidNumber("Input account number to remove: ");
             var exists = bank.AccountWithNumberExists(accountNumber);
             if (!exists)
@@ -206,6 +220,13 @@
 
         private int GetAccount()
         {
+            if (bank.GetAccountList().Count == 0)
+            {
+                Console.WriteLine("No accounts available.");
+                Halt();
+                return -1;
+            }
+
             while (true)
             {
                 var accountNr = GetValidNumber("Input account number: ");
@@ -246,12 +267,12 @@
 
         private void ListAccounts()
         {
-            var accountList = bank.GetAccountList();
+            // Order by account number
+            var accountList = bank.GetAccountList().OrderBy( acc => acc.AccountNumber).ToList();
 
             if (accountList.Count == 0)
             {
                 Console.WriteLine("No accounts available.");
-                Halt();
                 return;
             }
 

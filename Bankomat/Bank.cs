@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Bankomat
+﻿namespace Bankomat
 {
     public class Bank
     {
@@ -23,10 +21,7 @@ namespace Bankomat
             }
         }
 
-        /************************
-         * Account operations
-         ************************/
-
+        #region Account operations
         public void Withdraw(int accountNr, int amount)
         {
             try
@@ -56,7 +51,7 @@ namespace Bankomat
 
         public void CreateAccount(string name, int initialBalance=0)
         {
-            var accountNr = GetNewAccountId();
+            var accountNr = GenerateValidId();
             var account = new BankAccount(accountNr, name, initialBalance);
             accounts.Add(account);
         }
@@ -121,7 +116,9 @@ namespace Bankomat
             return false;
         }
 
-        private int GetNewAccountId()
+        #endregion
+        #region Helpers
+        private int GenerateValidId()
         {
             Random rnd = new Random();
             while (true)
@@ -142,5 +139,6 @@ namespace Bankomat
         {
             storageManager.Save(accounts);
         }
+        #endregion
     }
 }

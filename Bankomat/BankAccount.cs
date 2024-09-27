@@ -14,6 +14,7 @@
             Name = name;
         }
 
+        #region Account operations
         public void Deposit(int amount)
         {
             if (amount < 0)
@@ -37,5 +38,7 @@
 
             Balance -= amount;
         }
+
+        #endregion
     }
 }
